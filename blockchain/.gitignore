@@ -1,0 +1,10 @@
+# Hardhat build artifacts (auto-generated, do not edit)
+artifacts/
+cache/
+deployments/
+
+# Environment variables — NEVER commit!
+.env
+
+# Node modules
+node_modules/
