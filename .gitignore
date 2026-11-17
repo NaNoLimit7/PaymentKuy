@@ -13,7 +13,7 @@
 /.vscode
 /.zed
 /auth.json
-/node_modules
+node_modules/
 /public/build
 /public/fonts-manifest.dev.json
 /public/hot
@@ -21,7 +21,16 @@
 /storage/*.key
 /storage/pail
 /vendor
+database/*.sqlite
+database/*.sqlite-journal
 _ide_helper.php
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Blockchain ignores
+blockchain/node_modules/
+blockchain/artifacts/
+blockchain/cache/
+blockchain/.env
+
