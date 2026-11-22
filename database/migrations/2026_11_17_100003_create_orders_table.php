@@ -26,7 +26,9 @@ return new class extends Migration
             $table->foreign('customer_id', 'fk_orders_customer')->references('id')->on('customers');
         });
 
-        DB::statement('ALTER TABLE `orders` ADD CONSTRAINT `chk_orders_amount` CHECK (`amount` > 0)');
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement('ALTER TABLE `orders` ADD CONSTRAINT `chk_orders_amount` CHECK (`amount` > 0)');
+        }
     }
 
     public function down(): void

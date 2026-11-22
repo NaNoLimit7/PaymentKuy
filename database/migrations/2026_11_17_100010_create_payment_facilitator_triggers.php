@@ -7,6 +7,10 @@ return new class extends Migration
 {
     public function up(): void
     {
+        if (DB::getDriverName() === 'sqlite') {
+            return;
+        }
+
         DB::unprepared(<<<'SQL'
             CREATE TRIGGER trg_audit_no_update BEFORE UPDATE ON audit_logs
             FOR EACH ROW

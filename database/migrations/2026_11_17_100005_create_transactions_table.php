@@ -36,15 +36,17 @@ return new class extends Migration
             $table->foreign('payment_token_id', 'fk_trx_token')->references('id')->on('payment_tokens');
         });
 
-        DB::statement('ALTER TABLE `transactions` ADD CONSTRAINT `chk_trx_amount` CHECK (`amount` > 0)');
-        DB::statement(<<<'SQL'
-            ALTER TABLE `transactions` ADD CONSTRAINT `chk_trx_state` CHECK (
-                (`status` = 'pending' AND `paid_at` IS NULL AND `expired_at` IS NULL) OR
-                (`status` = 'proceed' AND `paid_at` IS NOT NULL AND `payment_token_id` IS NOT NULL
-                    AND `expired_at` IS NULL AND `gateway_ref` IS NOT NULL AND `gateway_ref` <> '') OR
-                (`status` = 'expired' AND `paid_at` IS NULL AND `expired_at` IS NOT NULL)
-            )
-        SQL);
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement('ALTER TABLE `transactions` ADD CONSTRAINT `chk_trx_amount` CHECK (`amount` > 0)');
+            DB::statement(<<<'SQL'
+                ALTER TABLE `transactions` ADD CONSTRAINT `chk_trx_state` CHECK (
+                    (`status` = 'pending' AND `paid_at` IS NULL AND `expired_at` IS NULL) OR
+                    (`status` = 'proceed' AND `paid_at` IS NOT NULL AND `payment_token_id` IS NOT NULL
+                        AND `expired_at` IS NULL AND `gateway_ref` IS NOT NULL AND `gateway_ref` <> '') OR
+                    (`status` = 'expired' AND `paid_at` IS NULL AND `expired_at` IS NOT NULL)
+                )
+            SQL);
+        }
     }
 
     public function down(): void

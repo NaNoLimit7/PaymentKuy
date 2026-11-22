@@ -38,8 +38,10 @@ return new class extends Migration
             $table->foreign('audit_log_id', 'fk_receipt_audit')->references('id')->on('audit_logs');
         });
 
-        DB::statement('ALTER TABLE `blockchain_receipts` ADD CONSTRAINT `chk_receipt_amount` CHECK (`amount_minor` > 0)');
-        DB::statement('ALTER TABLE `blockchain_receipts` ADD CONSTRAINT `chk_receipt_settlement` CHECK (`settlement_time` > 0)');
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement('ALTER TABLE `blockchain_receipts` ADD CONSTRAINT `chk_receipt_amount` CHECK (`amount_minor` > 0)');
+            DB::statement('ALTER TABLE `blockchain_receipts` ADD CONSTRAINT `chk_receipt_settlement` CHECK (`settlement_time` > 0)');
+        }
     }
 
     public function down(): void
